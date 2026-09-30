@@ -22,7 +22,7 @@ HINDI_LABELS = [
     "श","ष","स","ह","क्ष","त्र","ज्ञ","श्र"
 ]
 
-MODEL_DIR = Path(__file__).resolve().parent / "models"
+MODEL_DIR = Path(__file__).resolve().parent
 
 # ---------------------------------------------------------
 # Load models once
