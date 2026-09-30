@@ -29,9 +29,21 @@ MODEL_DIR = Path(__file__).resolve().parent / "models"
 # ---------------------------------------------------------
 @st.cache_resource
 def load_models():
-    perceptron = tf.keras.models.load_model(MODEL_DIR / "perceptron.keras")
-    ann = tf.keras.models.load_model(MODEL_DIR / "ann.keras")
-    cnn = tf.keras.models.load_model(MODEL_DIR / "cnn.keras")
+    perceptron = tf.keras.models.load_model(
+        MODEL_DIR / "perceptron.keras",
+        compile=False
+    )
+
+    ann = tf.keras.models.load_model(
+        MODEL_DIR / "ann.keras",
+        compile=False
+    )
+
+    cnn = tf.keras.models.load_model(
+        MODEL_DIR / "cnn.keras",
+        compile=False
+    )
+
     return perceptron, ann, cnn
 
 perceptron, ann, cnn = load_models()
