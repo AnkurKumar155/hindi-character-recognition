@@ -1,59 +1,45 @@
-# Hindi Character Recognition Deployment
+# Hindi Character Recognition — Drawing App
 
-This deployment runs the three Keras models from the Hindi character notebook:
+This version removes image upload. The user draws one Hindi character directly on a canvas.
 
-- `perceptron.keras`
-- `ann.keras`
-- `cnn.keras`
+The app simultaneously shows:
+- Perceptron prediction
+- ANN prediction
+- CNN prediction
+- confidence for each model
+- model agreement/disagreement
+- top 5 CNN predictions
+- the processed 28x28 input
 
-The Streamlit app accepts a single Hindi character image and displays predictions from all three models.
-
-## 1. Save the models in Colab
-
-Run this cell **after all three models have finished training**:
-
-```python
-import os
-os.makedirs("/content/models", exist_ok=True)
-
-perceptron.save("/content/models/perceptron.keras")
-ann.save("/content/models/ann.keras")
-cnn.save("/content/models/cnn.keras")
-```
-
-Your notebook currently has the save cell before the CNN definition, so make sure you execute saving only after `cnn.fit(...)` has completed.
-
-Then download the three `.keras` files.
-
-## 2. Project structure
+## Project structure
 
 ```text
 hindi-character-recognition/
-│
 ├── app.py
 ├── requirements.txt
-│
 └── models/
     ├── perceptron.keras
     ├── ann.keras
     └── cnn.keras
 ```
 
-## 3. Run locally
+## Requirements
 
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
+`streamlit-drawable-canvas` provides the freehand drawing canvas in Streamlit. Version 0.13.0 was released in September 2026 and supports Python 3.10–3.13. 
 
-## 4. Deploy with Streamlit Community Cloud
+## Deployment
 
-Push this project to GitHub, including `app.py`, `requirements.txt`, and the three model files under `models/`.
+Use Python 3.12 or 3.13 on Streamlit Community Cloud.
 
-Then open Streamlit Community Cloud, choose the GitHub repository and select `app.py` as the entrypoint.
+Commit all files to GitHub and deploy `app.py`.
 
-## Important
+## Model input assumptions
 
-The preprocessing in the app is intended to approximate the 28x28 grayscale format used by the training notebook. For highest real-world accuracy, training data and deployment preprocessing should be made as similar as possible.
+This app assumes:
+- Perceptron and ANN accept `(28, 28)`
+- CNN accepts `(28, 28, 1)`
+- black background / white character
+- pixel values normalized to 0–1
+- 50 output classes
 
-The model labels remain numeric internally (0-49); the app converts them to the Hindi character names using the same 50-class mapping used by the notebook.
+The numeric labels are converted to the Hindi characters using the same class order used during training.
