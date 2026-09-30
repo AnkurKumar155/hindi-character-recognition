@@ -27,7 +27,7 @@ MODEL_DIR = Path(__file__).resolve().parent
 # ---------------------------------------------------------
 # Load models once
 # ---------------------------------------------------------
-@st.cache_resource
+#@st.cache_resource
 @st.cache_resource
 def load_models():
 
@@ -174,17 +174,21 @@ with left:
     )
 
     canvas_result = st_canvas(
-        fill_color="rgba(0, 0, 0, 0)",
-        stroke_width=stroke_width,
-        stroke_color="#FFFFFF",
-        background_color="#000000",
-        height=400,
-        width=400,
-        drawing_mode="freedraw",
-        update_streamlit=True,
-        display_toolbar=True,
-        key="hindi_canvas"
-    )
+    fill_color="rgba(0, 0, 0, 0)",
+    stroke_width=stroke_width,
+    stroke_color="#FFFFFF",
+    background_color="#000000",
+    height=400,
+    width=400,
+    drawing_mode="freedraw",
+    update_streamlit=True,
+    display_toolbar=True,
+    return_image_data=True,
+    key="hindi_canvas"
+)
+
+if canvas_result.image_data is not None:
+    processed = preprocess_canvas(canvas_result.image_data)
 
     st.caption("Write a single character in the black box.")
 
