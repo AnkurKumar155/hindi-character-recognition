@@ -28,23 +28,48 @@ MODEL_DIR = Path(__file__).resolve().parent / "models"
 # Load models once
 # ---------------------------------------------------------
 @st.cache_resource
+@st.cache_resource
 def load_models():
-    perceptron = tf.keras.models.load_model(
-        MODEL_DIR / "perceptron.keras",
-        compile=False
-    )
 
-    ann = tf.keras.models.load_model(
-        MODEL_DIR / "ann.keras",
-        compile=False
-    )
+    model_files = {
+        "Perceptron": MODEL_DIR / "perceptron.keras",
+        "ANN": MODEL_DIR / "ann.keras",
+        "CNN": MODEL_DIR / "cnn.keras"
+    }
 
-    cnn = tf.keras.models.load_model(
-        MODEL_DIR / "cnn.keras",
-        compile=False
-    )
+    # Check files first
+    for name, path in model_files.items():
+        if not path.exists():
+            st.error(f"{name} model not found: {path}")
+            st.stop()
 
-    return perceptron, ann, cnn
+        st.write(
+            f"{name}: {path.name} | "
+            f"{path.stat().st_size / (1024 * 1024):.2f} MB"
+        )
+
+    try:
+        perceptron = tf.keras.models.load_model(
+            model_files["Perceptron"],
+            compile=False
+        )
+
+        ann = tf.keras.models.load_model(
+            model_files["ANN"],
+            compile=False
+        )
+
+        cnn = tf.keras.models.load_model(
+            model_files["CNN"],
+            compile=False
+        )
+
+        return perceptron, ann, cnn
+
+    except Exception as e:
+        st.error("Model loading failed")
+        st.exception(e)
+        st.stop()
 
 perceptron, ann, cnn = load_models()
 
